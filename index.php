@@ -25,8 +25,24 @@ if($_GET['error'] == 'access_denied')
 
 if(isset($_POST['getToken']) && !empty($_POST['token']))
 {
-	$token = explode("#", $_POST['token']);
-	echo 'Your access token is: '.str_replace('access_token=', '', $token[1]);
+	$preToken = explode("#", $_POST['token']);
+	$token = str_replace('access_token=', '', $preToken[1]);
+
+	if(isset($_POST['username']))
+	{
+		$username = strtolower($_POST['username']); // sanitization
+		$fetchUrl = "https://api.instagram.com/v1/users/search?q=".$username."&access_token=".$token;
+		$get = file_get_contents($fetchUrl);
+		$json = json_decode($get);
+
+	    foreach($json->data as $user)
+		    if($user->username == $username)
+			    $userid = $user->id;
+	}
+
+	echo 'Your access token is: '.$token;
+	if(isset($userid))
+		echo '<br />Your user ID is: '.$userid;
 }
 else
 {
@@ -35,8 +51,9 @@ else
 	<br /><br />
 	If you\'ve already clicked the link above and authorized <b>'.$app_name.'</b> access to your basic information, do the following:
 	<ol>
-		<li>Copy the URL from the address bar above into the below textfield.</li>
-		<li>Press the <b>Just give me my token!</b> button.</li>
+		<li>Copy the URL from the address bar above into the URL textfield below.</li>
+		<li>You can optionally enter your Instagram username in the Username textfield to get your UserID!</li>
+		<li>Press the <b>Just give me my stuff!</b> button.</li>
 		<li>You will be redirected to a page that contains your access code in an easy to copy fashion!</li>
 	</ol>
 	You can alternatively just copy everything after <i>access_token=</i> in the URL above!
@@ -44,8 +61,9 @@ else
 	The source code to this script can be found here: <a href="https://github.com/septor/instauth/">https://github.com/septor/instauth</a>
 	<br /><br />
 	<form action="'.$_SERVER['PHP_SELF'].'" method="post">
-	<input type="text" name="token" />
-	<input type="submit" name="getToken" value="Just give me my token!">
+	URL: <input type="text" name="token" /><br />
+	Username: <input type="text" name="username" /><br />
+	<input type="submit" name="getToken" value="Just give me my stuff!">
 	</form>';
 }
 
