@@ -1,6 +1,6 @@
 # Instauth!
 
-Get your Instagram `access_token` with this script. It's used for both my [Imggregator](https://github/septor/imggregator) e107 plugin and [Arcade](https://github.com/trickmod/arcade) my Photo Gallery script.
+Get your Instagram `access_token` and optionally your `user_id` with this script. It's used for both my [Imggregator](https://github/septor/imggregator) e107 plugin and [Arcade](https://github.com/trickmod/arcade) my Photo Gallery script.
 
 The source code is provided to hopefully show that I am not using any of the information obtained from the script!
 
